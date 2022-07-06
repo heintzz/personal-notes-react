@@ -9,6 +9,7 @@ class NoteBody extends React.Component {
             notes: getInitialData(),
             title: '',
             body: '',
+            isValid: true,
         }
         
         this.onDelete = this.onDelete.bind(this)
@@ -37,20 +38,32 @@ class NoteBody extends React.Component {
     }
 
     onAddNote({title, body}) {
-        this.setState((prevState) => {
-            return {
-                notes: [ 
-                    ...prevState.notes,
-                    {
-                        id: +new Date(),
-                        title,
-                        body,
-                        createdAt: +new Date(),
-                        archived: false,
-                }]
-            }
-        })
-      
+        if(title && body) {
+            this.setState((prevState) => {
+                return {
+                    isValid: true,
+                    title: '',
+                    body: '', 
+                    notes: [ 
+                        ...prevState.notes,
+                        {
+                            id: +new Date(),
+                            title,
+                            body,
+                            createdAt: +new Date(),
+                            archived: false,
+                    }],
+                }
+            })
+        }
+        else {
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    isValid: false
+                }
+            })
+        }
     }
 
     onSubmitHandler(e) {
@@ -80,9 +93,9 @@ class NoteBody extends React.Component {
                 <div className='note-input'>
                     <h2>Buat Catatan</h2>
                     <form onSubmit={this.onSubmitHandler}>
-                        <p className='note-input__title__char-limit'>Sisa karakter: {remainingChar}</p>
-                        <input className='note-input__title' spellCheck='false' type='text' placeholder='Ini adalah judul....' value={this.state.title} onChange={this.onTitleChangeHandler} required/>
-                        <textarea className='note-input__body' spellCheck='false' placeholder='Tuliskan catatanmu di sini....' value={this.state.body} onChange={this.onBodyChangeHandler} required />
+                        {this.state.isValid ? <p className='note-input__title__char-limit'>Sisa karakter: {remainingChar}</p> : <p style={{color: 'red'}}>Please enter a value.</p>}
+                        <input className='note-input__title' spellCheck='false' type='text' placeholder='Ini adalah judul....' value={this.state.title} onChange={this.onTitleChangeHandler}/>
+                        <textarea className='note-input__body' spellCheck='false' placeholder='Tuliskan catatanmu di sini....' value={this.state.body} onChange={this.onBodyChangeHandler} />
                         <button type='submit'>Buat</button>
                     </form>
                 </div>

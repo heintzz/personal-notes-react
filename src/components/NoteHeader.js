@@ -24,7 +24,6 @@ class NoteHeader extends React.Component {
                         <input type='text' placeholder='Cari catatan....' spellCheck='false' value={this.state.searchKey} onChange={this.onSearchHandler} />
                     </div>
                 </div>  
-                {console.log(this.state.searchKey)}
                 <NoteBody keyword={this.state.searchKey} />
             </>
         )
